@@ -23,10 +23,31 @@ const programs = [
     },
   ];
   
-// Declare the action
+// Declare the actions
+
 const browse = (req, res) => {
+  if (req.query.q != null) {
+    const filteredPrograms = programs.filter((program) =>
+      program.synopsis.includes(req.query.q)
+    );
+
+    res.json(filteredPrograms);
+  } else {
     res.json(programs);
+  }
 };
 
-module.exports = { browse };
+const read = (req, res) => {
+  const parsedId = parseInt(req.params.id, 10);
+
+  const program = programs.find((p) => p.id === parsedId);
+
+  if (program != null) {
+    res.json(program);
+  } else {
+    res.sendStatus(404);
+  }
+};
+
+module.exports = { browse, read };
   
